@@ -1,0 +1,20 @@
+!!!!!!!!!!!!!!!! Mitigacion de DHCP Starvation (DHCP Snooping + rate limit)
+en
+conf term
+!!!! Habilitar DHCP Snooping globalmente
+ip dhcp snooping
+
+!!!! Aplicar a VLAN1
+ip dhcp snooping vlan 1
+
+!!!! Puerto legitimo = trusted
+interface GigabitEthernet0/0
+ip dhcp snooping trust
+exit
+
+!!!! Puerto atacante = limitar a 10 paquetes/seg
+!!!! Esto evita que agote el pool de IPs
+interface GigabitEthernet0/1
+ip dhcp snooping limit rate 10
+exit
+do wr
